@@ -6,6 +6,7 @@
 
 section .data
     prompt db "Enter values separated by whitespace and enclosed in pipes (|):", 0
+    input_format db "%255s", 0 ; Limit input to 255 characters
     format db "%f", 0          ; Format string for sscanf to convert string to float
     pipe db "|", 0             ; Pipe character for delimiters
     error_msg db "Error: Invalid input or memory allocation failed.", 10, 0
@@ -32,14 +33,14 @@ extractAndConvertFloats:
     xor eax, eax              ; Clear RAX (no floating-point arguments)
     call printf
 
-; =====================================problem of segmentation fault starts above here 
-    ; Read the input string from the user
-    mov rdi, input
-    xor eax, eax              ; Clear RAX (no floating-point arguments)
+    ; Prepare to read the input string from the user
+    mov rdi, input_format      ; Pass the input format string
+    lea rsi, [input]           ; Load the address of the input buffer
+    xor eax, eax               ; Clear RAX (no floating-point arguments)
     call scanf
 
     ; Find the first pipe '|' character in the input string
-    mov rdi, input
+    lea rdi, [input]           ; Load the address of the input buffer
     call find_pipe
     
     ; Check if the first pipe was found
@@ -105,7 +106,7 @@ done_parsing:
 
     ; Copy floats from the temporary buffer to the dynamically allocated array
     mov rdi, rax
-    mov rsi, floats
+    lea rsi, [floats]          ; Load the address of the floats buffer
     mov ecx, [num_floats]
     rep movsq                  ; Copy floats from buffer to allocated memory
 
