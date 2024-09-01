@@ -1,7 +1,7 @@
 ; ==========================
-; Group member 01: Yohali Malaika_Kamangu_u23618583
-; Group member 02: Mpho_Surname_student-nr
-; Group member 03: Aundrea_Surname_student-nr
+; Group member 01: Yohali_Malaika_Kamangu_u23618583
+; Group member 02: Aundrea_Nandie_Ncube_u22747363
+; Group member 03: Mpho_Siminya_u21824241
 ; ==========================
 section .text
     global convertStringToFloat
