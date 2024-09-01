@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 extern float convertStringToFloat(const char *str);
 extern float* extractAndConvertFloats(int *numFloats);
