@@ -8,24 +8,24 @@ section .text
     extern strtof
 
 convertStringToFloat:
-    ; Function prologue
-    push    rbp                    ; Save the base pointer
-    mov     rbp, rsp               ; Set the base pointer to the current stack pointer
-    sub     rsp, 64                ; Allocate 64 bytes of space on the stack
+    ; Function setup
+    push    rbp                    ; Preserve the base pointer
+    mov     rbp, rsp               ; Set base pointer to current stack pointer
+    sub     rsp, 64                ; Reserve 64 bytes on the stack for local storage
 
-    ; Check if the string pointer is null
-    test    rdi, rdi               ; Test if rdi (input string pointer) is null
-    je      return_zero            ; If null, jump to return_zero
+    ; Validate the input string pointer
+    test    rdi, rdi               ; Check if rdi (input string) is null
+    je      zero_return            ; If null, jump to zero_return
 
-    ; Call strtof function to convert the string to a float
-    xor     rsi, rsi               ; Clear rsi (setting it to NULL, no endptr)
-    call    strtof                 ; Call the strtof function with rdi as the string and rsi as NULL
+    ; Utilize the strtof function to perform the conversion
+    xor     rsi, rsi               ; Reset rsi to NULL (no end pointer needed)
+    call    strtof                 ; Convert string in rdi to float, rsi set to NULL
 
-    ; Function epilogue
-    leave                          ; Restore the previous stack frame (mov rsp, rbp; pop rbp)
-    ret                            ; Return from the function
+    ; Function teardown
+    leave                          ; Revert the stack to previous state (mov rsp, rbp; pop rbp)
+    ret                            ; Exit the function and return result in xmm0
 
-return_zero:
-    xorps   xmm0, xmm0             ; Clear xmm0, setting it to 0.0 (return value for null input)
-    leave                          ; Restore the previous stack frame
-    ret                            ; Return from the function
+zero_return:
+    xorps   xmm0, xmm0             ; Set xmm0 to 0.0 to return for null input
+    leave                          ; Revert the stack to previous state
+    ret                            ; Exit the function
